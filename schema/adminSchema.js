@@ -14,7 +14,7 @@ module.exports.adminSchema = maongoose.Schema({
     type: String,
   },
   password: {
-    type: Number,
+    type: String,
     require: true,
   },
 });

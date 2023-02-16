@@ -19,7 +19,6 @@ module.exports.getAllStudent = async (req, res) => {
     response(res, err, data);
   });
   console.log("success");
-  res.json("get successfully");
 };
 
 // post Student

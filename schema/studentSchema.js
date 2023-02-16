@@ -13,6 +13,10 @@ module.exports.studentSchema = maongoose.Schema({
     type: String,
     require: true,
   },
+  password: {
+    type: String,
+    require: true,
+  },
   class: {
     type: String,
     require: true,

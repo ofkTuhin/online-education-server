@@ -35,6 +35,7 @@ module.exports.postAdmin = async (req, res) => {
   const postData = new Admin(adminData);
   postData.save(adminData, (error) => {
     if (error) {
+      console.log(error);
       res.status(500).send({
         success: false,
         error: "There is server side error",
