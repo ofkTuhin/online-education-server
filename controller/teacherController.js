@@ -1,7 +1,9 @@
+const { checkExists } = require("../lib/utils");
 const { Teacher } = require("../model/teacherModel");
 
 // get Teacher
 module.exports.getAllTeacher = async (req, res) => {
+  const { user } = req.headers;
   const response = (res, err, data) => {
     if (err) {
       res.status(500).json({
@@ -14,7 +16,7 @@ module.exports.getAllTeacher = async (req, res) => {
       });
     }
   };
-  await Teacher.find({}).exec((err, data) => {
+  await Teacher.find({ email: user }).exec((err, data) => {
     console.log(data);
     response(res, err, data);
   });
@@ -34,18 +36,26 @@ module.exports.postTeacher = async (req, res) => {
     ...req.body,
     role: "teacher",
   };
-  const postData = new Teacher(teacherData);
-  postData.save(teacherData, (error) => {
-    if (error) {
-      res.status(500).json({
-        success: false,
-        error: "There is server side error",
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        message: "data added sucessfully",
-      });
-    }
-  });
+
+  if (checkExists(req, Teacher)) {
+    res.status(409).json({
+      success: false,
+      message: "This email already exists",
+    });
+  } else {
+    const postData = new Teacher(teacherData);
+    postData.save(teacherData, (error) => {
+      if (error) {
+        res.status(500).json({
+          success: false,
+          error: "There is server side error",
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          message: "data added sucessfully",
+        });
+      }
+    });
+  }
 };

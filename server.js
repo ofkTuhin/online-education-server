@@ -1,7 +1,7 @@
 // import function
 const express = require("express");
 const cors = require("cors");
-const userRouter = require("./router/userRouter");
+
 const { dbConnect } = require("./dbConnect");
 const { errorHandler } = require("./errorHandler");
 require("dotenv").config();
@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 const adminRouter = require("./router/adminRouter");
 const teacherRouter = require("./router/teacherRouter");
 const studentRouter = require("./router/studentRouter");
+const classRouter = require("./router/classRouter");
 
 // set port
 const port = process.env.PORT;
@@ -35,6 +36,7 @@ app.use(errorHandler);
 app.use("/api/admin", adminRouter);
 app.use("/api/teacher", teacherRouter);
 app.use("/api/student", studentRouter);
+app.use("/api/class", classRouter);
 
 // local server port
 app.listen(port);

@@ -1,9 +1,17 @@
-const { default: mongoose } = require("mongoose");
 const maongoose = require("mongoose");
 
 module.exports.classSchema = maongoose.Schema({
   teacher: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: String,
+    require: true,
+  },
+  class: {
+    type: String,
+    require: true,
+  },
+
+  group: {
+    type: String,
   },
   subject: {
     type: String,
@@ -13,20 +21,12 @@ module.exports.classSchema = maongoose.Schema({
     type: String,
     require: true,
   },
-  class: {
-    type: Number,
-    require: true,
-  },
-
-  group: {
-    type: String,
-  },
   lecture: {
     type: String,
   },
-  lecture_pdf: {
-    type: File,
-  },
+  // lecture_pdf: {
+  //   type: File,
+  // },
   date: {
     type: Date,
     default: Date.now(),

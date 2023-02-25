@@ -1,5 +1,5 @@
+const { checkExists } = require("../lib/utils");
 const { Admin } = require("../model/adminModel");
-
 // get Admin
 module.exports.getAllAdmin = async (req, res) => {
   const response = (res, err, data) => {
@@ -32,19 +32,26 @@ module.exports.postAdmin = async (req, res) => {
     ...req.body,
     role: "admin",
   };
-  const postData = new Admin(adminData);
-  postData.save(adminData, (error) => {
-    if (error) {
-      console.log(error);
-      res.status(500).send({
-        success: false,
-        error: "There is server side error",
-      });
-    } else {
-      res.status(200).send({
-        success: true,
-        message: "data added sucessfully",
-      });
-    }
-  });
+  if (checkExists(req, Admin)) {
+    res.status(409).json({
+      success: false,
+      message: "This email already exists",
+    });
+  } else {
+    const postData = new Admin(adminData);
+    postData.save(adminData, (error) => {
+      if (error) {
+        console.log(error);
+        res.status(500).send({
+          success: false,
+          error: "There is server side error",
+        });
+      } else {
+        res.status(200).send({
+          success: true,
+          message: "data added sucessfully",
+        });
+      }
+    });
+  }
 };
