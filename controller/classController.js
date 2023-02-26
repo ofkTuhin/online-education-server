@@ -1,11 +1,43 @@
 const { Class } = require("../model/classModel");
 
 // get class
-module.exports.getAllClass = (req, res) => {
-  console.log("success");
-  res.send("get successfully");
+module.exports.getAllClass = async (req, res) => {
+  const response = (res, err, data) => {
+    if (err) {
+      res.status(500).json({
+        error: "the server side error",
+      });
+    } else {
+      res.status(200).json({
+        result: data,
+        message: "data get succesfully",
+      });
+    }
+  };
+  await Class.find({}).exec((err, data) => {
+    console.log(data);
+    response(res, err, data);
+  });
 };
-
+// const getSingle class
+module.exports.getSingleClass = async (req, res) => {
+  const response = (res, err, data) => {
+    if (err) {
+      res.status(500).json({
+        error: "the server side error",
+      });
+    } else {
+      res.status(200).json({
+        result: data,
+        message: "data get succesfully",
+      });
+    }
+  };
+  await Class.find({ _id: req.params.id }).exec((err, data) => {
+    console.log(data);
+    response(res, err, data);
+  });
+};
 // post class
 module.exports.postClass = async (req, res) => {
   if (!req.body.class || !req.body.teacher) {

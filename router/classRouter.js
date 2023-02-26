@@ -7,4 +7,6 @@ classRouter
   .get(classController.getAllClass)
   .post(classController.postClass);
 
+classRouter.get("/:id", classController.getSingleClass);
+
 module.exports = classRouter;
