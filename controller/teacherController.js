@@ -17,7 +17,6 @@ module.exports.getAllTeacher = async (req, res) => {
     }
   };
   await Teacher.find({ email: user }).exec((err, data) => {
-    console.log(data);
     response(res, err, data);
   });
   console.log("success");
@@ -25,7 +24,6 @@ module.exports.getAllTeacher = async (req, res) => {
 
 // post Teacher
 module.exports.postTeacher = async (req, res) => {
-  console.log(req.body);
   if (!req.body.name || !req.body.email || !req.body.password) {
     res.status(401).json({
       success: false,
@@ -36,8 +34,8 @@ module.exports.postTeacher = async (req, res) => {
     ...req.body,
     role: "teacher",
   };
-
-  if (checkExists(req, Teacher)) {
+  const isUser = await checkExists(req, Teacher);
+  if (isUser.length > 0) {
     res.status(409).json({
       success: false,
       message: "This email already exists",

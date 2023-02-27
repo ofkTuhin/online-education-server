@@ -15,7 +15,6 @@ module.exports.getAllAdmin = async (req, res) => {
     }
   };
   await Admin.find({}).exec((err, data) => {
-    console.log(data);
     response(res, err, data);
   });
 };
@@ -32,7 +31,8 @@ module.exports.postAdmin = async (req, res) => {
     ...req.body,
     role: "admin",
   };
-  if (checkExists(req, Admin)) {
+  const isAdmin = await checkExists(req, Admin);
+  if (isAdmin.length > 0) {
     res.status(409).json({
       success: false,
       message: "This email already exists",

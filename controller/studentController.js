@@ -35,8 +35,8 @@ module.exports.postStudent = async (req, res) => {
     ...req.body,
     role: "student",
   };
-
-  if (checkExists(req, Student)) {
+  const isStudent = await checkExists(req, Student);
+  if (isStudent.length > 0) {
     res.status(409).json({
       success: false,
       message: "This email already exists",

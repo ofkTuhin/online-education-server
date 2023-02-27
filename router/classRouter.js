@@ -8,5 +8,6 @@ classRouter
   .post(classController.postClass);
 
 classRouter.get("/:id", classController.getSingleClass);
+classRouter.get("/teacherData/:email", classController.getClassByTeacher);
 
 module.exports = classRouter;
