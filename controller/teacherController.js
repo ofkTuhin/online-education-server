@@ -38,6 +38,7 @@ module.exports.getAllTeacher = async (req, res) => {
 };
 // post Teacher
 module.exports.postTeacher = async (req, res) => {
+  console.log(req.body);
   if (!req.body.name || !req.body.email || !req.body.password) {
     res.status(401).json({
       success: false,
