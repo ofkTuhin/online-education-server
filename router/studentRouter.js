@@ -7,4 +7,6 @@ studentRouter
   .get(studentController.getAllStudent)
   .post(studentController.postStudent);
 
+studentRouter.get("/login", studentController.getLoginStudent);
+
 module.exports = studentRouter;

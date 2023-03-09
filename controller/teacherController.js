@@ -2,7 +2,7 @@ const { checkExists } = require("../lib/utils");
 const { Teacher } = require("../model/teacherModel");
 
 // get Teacher
-module.exports.getAllTeacher = async (req, res) => {
+module.exports.getLoginTeacher = async (req, res) => {
   const { user } = req.headers;
   const response = (res, err, data) => {
     if (err) {
@@ -22,6 +22,20 @@ module.exports.getAllTeacher = async (req, res) => {
   console.log("success");
 };
 
+// get Teacher
+module.exports.getAllTeacher = async (req, res) => {
+  try {
+    const teacher = await Teacher.find({});
+    res.status(200).json({
+      result: teacher,
+      message: "data get succesfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: "the server side error",
+    });
+  }
+};
 // post Teacher
 module.exports.postTeacher = async (req, res) => {
   if (!req.body.name || !req.body.email || !req.body.password) {
