@@ -11,5 +11,6 @@ classRouter
 
 classRouter.get("/:id", classController.getSingleClass);
 classRouter.get("/teacherData/:email", classController.getClassByTeacher);
+classRouter.delete("/delete-class/:id", classController.deleteClass);
 
 module.exports = classRouter;

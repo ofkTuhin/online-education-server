@@ -93,7 +93,7 @@ module.exports.postClass = async (req, res) => {
       },
       requestBody: {
         name: fileObject.originalname,
-        parents: ["1slVHYVqhgz5iCzoJn-nOm0Fsb33NdZIc"],
+        parents: ["1g8hOppt70jraBQ7D2mvFUBrxc0Q58fqG"],
       },
       fields: "id,name",
     });
@@ -101,19 +101,8 @@ module.exports.postClass = async (req, res) => {
   };
 
   try {
-    const { body, file } = req;
-    console.log(body.file);
-
-    await uploadFile(body.file);
-
-    res.status(200).json({
-      message: "upload file",
-    });
-  } catch (f) {
-    res.send(f.message);
-  }
-
-  try {
+    const dataupload = await uploadFile(req.body.file);
+    console.log(dataupload);
     const postData = new Class(req.body);
 
     await postData.save();
@@ -126,6 +115,20 @@ module.exports.postClass = async (req, res) => {
     res.status(500).send({
       success: false,
       error: "There is server side error",
+    });
+  }
+};
+
+module.exports.deleteClass = async (req, res) => {
+  try {
+    await Class.deleteOne({ _id: req.params.id });
+    res.status(200).send({
+      success: true,
+      message: "data delete sucessfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "There is server side error",
     });
   }
 };
