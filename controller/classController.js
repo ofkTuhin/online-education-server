@@ -3,7 +3,7 @@ const stream = require("stream");
 const express = require("express");
 
 const path = require("path");
-const { google } = require("googleapis");
+const { authenticateGoogle } = require("../middleware/googleAuth");
 
 // get class
 module.exports.getAllClass = async (req, res) => {
@@ -66,13 +66,7 @@ module.exports.getClassByTeacher = async (req, res) => {
 
 // post class
 module.exports.postClass = async (req, res) => {
-  const KEYFILEPATH = path.join(__dirname, "../credential.json");
-  const SCOPES = ["https://www.googleapis.com/auth/drive"];
-
-  const auth = new google.auth.GoogleAuth({
-    keyFile: KEYFILEPATH,
-    scopes: SCOPES,
-  });
+  const auth = authenticateGoogle();
 
   //
 
@@ -82,23 +76,6 @@ module.exports.postClass = async (req, res) => {
       error: "data are missing",
     });
   }
-
-  const uploadFile = async (fileObject) => {
-    const bufferStream = new stream.PassThrough();
-    bufferStream.end(fileObject.buffer);
-    const { data } = await google.drive({ version: "v3", auth }).files.create({
-      media: {
-        mimeType: fileObject.mimeType,
-        body: bufferStream,
-      },
-      requestBody: {
-        name: fileObject.originalname,
-        parents: ["1g8hOppt70jraBQ7D2mvFUBrxc0Q58fqG"],
-      },
-      fields: "id,name",
-    });
-    console.log(`Uploaded file ${data.name} ${data.id}`);
-  };
 
   try {
     const dataupload = await uploadFile(req.body.file);
