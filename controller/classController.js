@@ -3,7 +3,11 @@ const stream = require("stream");
 const express = require("express");
 
 const path = require("path");
-const { authenticateGoogle } = require("../middleware/googleAuth");
+const {
+  authenticateGoogle,
+  uploadFileOnDrive,
+} = require("../middleware/googleAuth");
+const { File } = require("../model/file");
 
 // get class
 module.exports.getAllClass = async (req, res) => {
@@ -107,5 +111,39 @@ module.exports.deleteClass = async (req, res) => {
     res.status(500).json({
       message: "There is server side error",
     });
+  }
+};
+
+module.exports.uploadPdf = async (req, res, next) => {
+  console.log(req.file);
+  try {
+    if (!req.file) {
+      res.status(400).send("No file uploaded.");
+      return;
+    }
+    const auth = authenticateGoogle();
+    const response = await uploadFileOnDrive(req.file, auth);
+    console.log(response.data);
+    const postFile = new File({
+      file: response.data.id,
+    });
+    await postFile.save();
+
+    res.status(200).json({ response });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.getFile = async (req, res) => {
+  try {
+    await File.find({}).exec((err, data) => {
+      console.log(err);
+      res.status(200).json({
+        files: data,
+      });
+    });
+  } catch (error) {
+    console.log(error);
   }
 };
