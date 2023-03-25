@@ -8,6 +8,7 @@ const {
   uploadFileOnDrive,
 } = require("../middleware/googleAuth");
 const { File } = require("../model/file");
+const { json } = require("body-parser");
 
 // get class
 module.exports.getAllClass = async (req, res) => {
@@ -114,7 +115,7 @@ module.exports.deleteClass = async (req, res) => {
   }
 };
 
-module.exports.uploadPdf = async (req, res, next) => {
+module.exports.uploadPdf = async (req, res) => {
   console.log(req.file);
   try {
     if (!req.file) {
@@ -123,8 +124,9 @@ module.exports.uploadPdf = async (req, res, next) => {
     }
     const auth = authenticateGoogle();
     const response = await uploadFileOnDrive(req.file, auth);
-    console.log(response.data);
+
     const postFile = new File({
+      name: response.config.data.name,
       file: response.data.id,
     });
     await postFile.save();
