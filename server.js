@@ -8,6 +8,7 @@ require("dotenv").config();
 const app = express();
 const bodyParser = require("body-parser");
 const adminRouter = require("./router/adminRouter");
+const productRouter = require("./router/productRouter");
 const teacherRouter = require("./router/teacherRouter");
 const studentRouter = require("./router/studentRouter");
 const classRouter = require("./router/classRouter");
@@ -34,6 +35,7 @@ app.use(errorHandler);
 
 // router setup
 app.use("/api/admin", adminRouter);
+app.use("/api/product", productRouter);
 app.use("/api/teacher", teacherRouter);
 app.use("/api/student", studentRouter);
 app.use("/api/class", classRouter);
