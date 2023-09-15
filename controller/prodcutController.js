@@ -1,3 +1,4 @@
+const { response } = require("express");
 const { checkExists } = require("../lib/utils");
 const { Product } = require("../model/productModel");
 // get Product
@@ -19,6 +20,20 @@ module.exports.getAllProduct = async (req, res) => {
   });
 };
 
+// update coments
+module.exports.updateComment=async (req,res)=>{
+  const id=req.params.id
+ 
+ const update= await Product.updateOne({_id:id},{
+    $push:{
+      comments:req.body.data
+    }
+  },{new:true})
+  res.status(200)
+ console.log(update)
+}
+
+// get 
 // post Product
 module.exports.postProduct = async (req, res) => {
   if (!req.body.name || !req.body.email) {
@@ -56,3 +71,22 @@ module.exports.postProduct = async (req, res) => {
     });
   }
 };
+
+module.exports.getSingleProduct=async(req,res)=>{
+  const id=req.params.id
+  const result= await Product.findOne({_id:id}).lean()
+  res.status(200).json({
+    success:true,
+    result:result
+  })
+}
+
+module.exports.getComment=async(req,res)=>{
+  const id=req.params.id
+  const result= await Product.findOne({_id:id},{comments:1}).lean()
+  console.log(result)
+  res.status(200).json({
+    success:true,
+    result:result
+  })
+}
